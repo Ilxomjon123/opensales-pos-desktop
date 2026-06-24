@@ -40,7 +40,7 @@ jobs:
           COMPOSER_PROCESS_TIMEOUT: 0
 
       - name: Install JS dependencies
-        run: npm ci
+        run: npm install --no-audit --no-fund
 
       - name: Build frontend assets
         run: npm run build
