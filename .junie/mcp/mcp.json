@@ -1,0 +1,11 @@
+{
+    "mcpServers": {
+        "laravel-boost": {
+            "command": "/opt/homebrew/Cellar/php@8.3/8.3.30/bin/php",
+            "args": [
+                "/Users/ilxomjonabdullayev/Public/Projects/statups/dealer-bot/artisan",
+                "boost:mcp"
+            ]
+        }
+    }
+}

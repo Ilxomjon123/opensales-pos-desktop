@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenSales — Investor Deck (yakuniy)</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1626; --card:#141d33; --line:#1f2a44;
+    --ink:#eaf0ff; --muted:#9fb0d0; --brand:#4f7cff; --brand2:#22d3a6;
+    --warn:#ffb020; --bad:#ff5d6c; --good:#22d3a6;
+    --radius:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:radial-gradient(1200px 800px at 80% -10%, #16223f 0%, var(--bg) 55%);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;
+    overflow:hidden;
+  }
+  .deck{height:100vh;width:100vw;position:relative}
+  .slide{
+    position:absolute;inset:0;
+    display:none;flex-direction:column;justify-content:center;
+    padding:5.5vh 7vw;
+    animation:fade .4s ease;
+  }
+  .slide.active{display:flex}
+  @keyframes fade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  h1{font-size:clamp(34px,5vw,68px);line-height:1.05;letter-spacing:-.02em;font-weight:800}
+  h2{font-size:clamp(24px,3.2vw,44px);line-height:1.1;letter-spacing:-.02em;font-weight:800;margin-bottom:.5em}
+  h3{font-size:clamp(14px,1.3vw,19px);font-weight:700;color:var(--brand2)}
+  p,li{font-size:clamp(14px,1.45vw,20px);color:var(--muted);line-height:1.5}
+  .lead{font-size:clamp(17px,1.9vw,27px);color:var(--ink);font-weight:500}
+  .tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--brand);background:rgba(79,124,255,.12);border:1px solid rgba(79,124,255,.3);
+    padding:5px 13px;border-radius:999px;margin-bottom:18px;align-self:flex-start}
+
+  .grid{display:grid;gap:16px;margin-top:6px}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  .card{background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);
+    border-radius:var(--radius);padding:20px;}
+  .card .k{font-size:clamp(26px,3.4vw,42px);font-weight:800;color:var(--ink);letter-spacing:-.02em;line-height:1}
+  .card .k.b{color:var(--brand)}.card .k.g{color:var(--brand2)}.card .k.w{color:var(--warn)}
+  .card .sub{font-size:13px;color:#6f80a3;margin-top:6px}
+  .card h4{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:5px}
+  .card p{font-size:14px}
+  .ico{font-size:24px;margin-bottom:8px;display:block}
+
+  ul{list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:8px}
+  ul li{padding-left:28px;position:relative;font-size:clamp(14px,1.4vw,19px)}
+  ul li::before{content:"";position:absolute;left:0;top:.5em;width:10px;height:10px;border-radius:3px;
+    background:var(--brand2);box-shadow:0 0 12px rgba(34,211,166,.6)}
+  ul.bad li::before{background:var(--bad);box-shadow:0 0 12px rgba(255,93,108,.5)}
+
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center}
+  .big{font-size:clamp(44px,7vw,110px);font-weight:800;letter-spacing:-.03em;line-height:1}
+  .grad{background:linear-gradient(120deg,var(--brand),var(--brand2));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+  .logo{display:flex;align-items:center;gap:14px;margin-bottom:28px}
+  .logo .mark{width:54px;height:54px;border-radius:14px;background:linear-gradient(135deg,var(--brand),var(--brand2));
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:26px;color:#08101f}
+  .logo .name{font-size:26px;font-weight:800;letter-spacing:-.01em}
+  .logo .name span{color:var(--brand2)}
+
+  .progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--brand),var(--brand2));
+    z-index:50;transition:width .3s ease}
+  .nav{position:fixed;bottom:16px;right:22px;display:flex;gap:8px;z-index:50}
+  .nav button{background:var(--card);border:1px solid var(--line);color:var(--ink);width:38px;height:38px;
+    border-radius:10px;font-size:18px;cursor:pointer}
+  .nav button:hover{border-color:var(--brand)}
+  .counter{position:fixed;bottom:22px;left:22px;font-size:12px;color:#5c6e90;z-index:50}
+
+  .price{display:flex;align-items:baseline;gap:7px}
+  .price .v{font-size:clamp(28px,3.6vw,46px);font-weight:800;color:var(--ink)}
+  .price .u{font-size:15px;color:var(--muted)}
+  table{width:100%;border-collapse:collapse;margin-top:8px}
+  td,th{padding:11px 10px;border-bottom:1px solid var(--line);text-align:left;font-size:clamp(13px,1.3vw,17px)}
+  th{color:var(--brand2);font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+  td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+  .pill{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(34,211,166,.12);
+    color:var(--brand2);border:1px solid rgba(34,211,166,.25)}
+  .pill.b{background:rgba(79,124,255,.14);color:var(--brand);border-color:rgba(79,124,255,.3)}
+  .muted2{color:#6f80a3}
+  .center{text-align:center;align-items:center}
+  .hl{color:var(--ink);font-weight:700}
+  .note{font-size:12px;color:#5c6e90;margin-top:14px}
+  .src{font-size:11px;color:#4f6088;margin-top:4px}
+
+  .funnel{display:flex;flex-direction:column;gap:14px;margin-top:6px}
+  .frow{display:flex;align-items:center;gap:18px}
+  .fbar{height:62px;border-radius:12px;display:flex;align-items:center;padding:0 20px;font-weight:800;
+    color:#06101f;font-size:clamp(15px,1.6vw,22px);white-space:nowrap}
+  .fbar.tam{width:100%;background:linear-gradient(90deg,#2b3a63,#3a517f);color:var(--ink)}
+  .fbar.sam{width:50%;background:linear-gradient(90deg,#2f5bd0,#4f7cff);color:#fff}
+  .fbar.som{width:18%;background:linear-gradient(90deg,#15a07c,#22d3a6)}
+  .fmeta{font-size:14px;color:var(--muted)}
+  .fmeta b{color:var(--ink);font-size:17px;display:block}
+
+  .chart{display:flex;align-items:flex-end;gap:min(3vw,34px);height:40vh;margin-top:10px;padding-top:10px}
+  .col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  .col .bar{width:64%;border-radius:10px 10px 0 0;background:linear-gradient(180deg,var(--brand),#2f5bd0);
+    position:relative;transition:height .5s ease;min-height:6px}
+  .col .bar.peak{background:linear-gradient(180deg,var(--brand2),#15a07c)}
+  .col .val{font-size:clamp(12px,1.2vw,16px);font-weight:800;color:var(--ink);margin-bottom:8px;white-space:nowrap}
+  .col .lab{font-size:13px;color:var(--muted);margin-top:10px;text-align:center}
+  .col .lab b{color:var(--ink);display:block;font-size:14px}
+  a{color:var(--brand2)}
+</style>
+</head>
+<body>
+<div class="progress" id="bar"></div>
+<div class="deck" id="deck">
+
+  <!-- 1 — TITLE -->
+  <section class="slide active center">
+    <div class="logo" style="justify-content:center">
+      <div class="mark"><svg viewBox="0 0 64 64" width="34" height="34" fill="none" stroke="#08101f" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M48 16 C 27 11, 13 24, 29 32 S 37 53, 13 48"/><path d="M39 11 L 48 16 L 45 25"/></svg></div>
+      <div class="name">Sale<span>flow</span></div>
+    </div>
+    <h1>Ulgurji savdoning<br>raqamli infratuzilmasi</h1>
+    <p class="lead" style="margin-top:24px;max-width:800px">
+      Omnichannel B2B SaaS — Telegram bot va mobil ilova. Productionda ishlaydi.
+      <span class="hl">$60M TAM</span>, 25 mln Telegram foydalanuvchi, deyarli nol mahalliy raqobat.
+    </p>
+    <p style="margin-top:26px" class="muted2">Investor Deck · Iyun 2026 · opensales.uz</p>
+  </section>
+
+  <!-- 2 — PROBLEM -->
+  <section class="slide">
+    <span class="tag">Muammo</span>
+    <h2>50 000+ ulgurji korxona hali qog'ozda ishlaydi</h2>
+    <div class="split">
+      <ul class="bad">
+        <li><span class="hl">Buyurtma</span> — telefon/WhatsApp, yozma iz yo'q.</li>
+        <li><span class="hl">Qarzdorlik</span> — daftarda, real-time nazorat yo'q.</li>
+        <li><span class="hl">Savdo agenti</span> — qimmat, inson xatosi, o'g'irlik.</li>
+        <li><span class="hl">Ombor & yetkazish</span> — bog'lanmagan, ko'rinmas.</li>
+      </ul>
+      <div class="card">
+        <h3>Bozor bo'shlig'i</h3>
+        <p style="margin-top:10px">O'zbekiston ulgurji savdo aylanmasi — <span class="hl">346 trln so'm/yil</span>.
+        Shuncha hajm, lekin mahalliy, bot-native, o'zbekcha B2B SaaS yo'q. Diller vosita kutyapti.</p>
+        <p class="src">Manba: stat.uz, 2025</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 — SOLUTION -->
+  <section class="slide">
+    <span class="tag">Yechim</span>
+    <h2>Bot + mobil ilova + web boshqaruv</h2>
+    <p class="lead" style="max-width:840px">Do'konchi Telegram botdan yoki mobil ilovadan zakaz beradi. Diller bitta dashboard'dan boshqaradi. Bitta kod bazasi — cheksiz bot, multi-tenant masshtab.</p>
+    <div class="grid g3" style="margin-top:24px">
+      <div class="card"><span class="ico">🤖</span><h4>Do'konchi → Bot yoki ilova</h4><p>Telegram bot yoki mobil ilova (Android/iOS) — katalog, savat, zakaz, hisob.</p></div>
+      <div class="card"><span class="ico">📊</span><h4>Diller → Panel</h4><p>Buyurtma, moliya, ombor, yetkazish, hisobot.</p></div>
+      <div class="card"><span class="ico">⚙️</span><h4>Biz → Platforma</h4><p>Multi-tenant, billing, monitoring, cheksiz diller.</p></div>
+    </div>
+  </section>
+
+  <!-- 4 — TRACTION / PRODUCT -->
+  <section class="slide">
+    <span class="tag">Mahsulot holati</span>
+    <h2>MVP emas — productionda ishlaydigan tizim</h2>
+    <div class="grid g4">
+      <div class="card center"><span class="k g">✓ Live</span><div class="sub">opensales.uz</div></div>
+      <div class="card center"><span class="k b">30+</span><div class="sub">to'liq modul</div></div>
+      <div class="card center"><span class="k">2 kanal</span><div class="sub">bot + mobil ilova</div></div>
+      <div class="card center"><span class="k w">4 til</span><div class="sub">uz · uz-cyrl · ru · en</div></div>
+    </div>
+    <p style="margin-top:20px">Mobil ilova (Android/iOS) · buyurtma · moliya & qarz · ombor · yetkazish zonalari · kuryer kassa · broadcast · aksiya · taʼminotchi · 6 xil hisobot · audit log · bot monitoring.</p>
+    <p class="note">Stack: Laravel 13 · PostgreSQL · Redis · Inertia + Vue 3 — masshtablanadigan, multi-tenant. Mobil ilova platformani Telegram'ga bog'liqlikdan xalos qiladi — Telegram bloklansa ham savdo to'xtamaydi. Texnik risk past.</p>
+  </section>
+
+  <!-- 5 — WHY NOW -->
+  <section class="slide">
+    <span class="tag">Nega hozir</span>
+    <h2>Bozor tayyor, raqobat hali yo'q</h2>
+    <div class="grid g3" style="margin-top:8px">
+      <div class="card"><span class="k b">25 mln</span><h4>Telegram foydalanuvchi</h4><p>Internet auditoriyaning 76% — bot eng tabiiy interfeys.</p><p class="src">uzdaily.uz, 2025</p></div>
+      <div class="card"><span class="k g">~51 500</span><h4>Ulgurji korxona</h4><p>UZ da faol ulgurji savdo korxonalari, asosan kichik/mikro.</p><p class="src">stat.uz, dek 2025</p></div>
+      <div class="card"><span class="k w">~0</span><h4>Bot-native raqobat</h4><p>Global ERP qimmat va og'ir; mahalliy yechim yo'q.</p></div>
+    </div>
+    <p class="lead" style="margin-top:22px">First-mover ustunligi — infratuzilmani biz qo'yamiz.</p>
+  </section>
+
+  <!-- 6 — MARKET SIZE TAM/SAM/SOM -->
+  <section class="slide">
+    <span class="tag">Bozor hajmi · TAM / SAM / SOM</span>
+    <h2>Qancha pul stolda turibdi</h2>
+    <div class="funnel">
+      <div class="frow">
+        <div class="fbar tam">TAM</div>
+        <div class="fmeta"><b>~$60M ARR / yil</b>~50 000 ulgurji korxona × ~$1 200 yillik to'lov</div>
+      </div>
+      <div class="frow">
+        <div class="fbar sam">SAM</div>
+        <div class="fmeta"><b>~$30M ARR / yil</b>~25 000 Telegram-faol, dealer-to-shop modeliga mos</div>
+      </div>
+      <div class="frow">
+        <div class="fbar som">SOM</div>
+        <div class="fmeta"><b>~$1.8M ARR / yil (3 yil)</b>~1 500 diller = SAM ning ~6% · ~1.8 mlrd so'm MRR</div>
+      </div>
+    </div>
+    <p class="note">Korxona soni — stat.uz (dek 2025). To'lov = 40 do'kon × 30 000 so'm ARPU. Kurs 12 000 so'm/$.</p>
+  </section>
+
+  <!-- 7 — ASSUMPTIONS -->
+  <section class="slide">
+    <span class="tag">Model asoslari · Assumptions</span>
+    <h2>Raqamlar qayerdan keldi</h2>
+    <table>
+      <tr><th>Ko'rsatkich</th><th class="r">Qiymat</th><th>Manba / izoh</th></tr>
+      <tr><td>Ulgurji korxonalar (TAM baza)</td><td class="r">~51 500</td><td>stat.uz, dek 2025</td></tr>
+      <tr><td>Chakana shoxobchalar</td><td class="r">~86 200</td><td>stat.uz — har diller ulanadigan do'konlar puli</td></tr>
+      <tr><td>Telegram auditoriya</td><td class="r">25 mln (76%)</td><td>uzdaily.uz, 2025</td></tr>
+      <tr><td>O'rtacha do'kon / diller</td><td class="r">40</td><td>pilot kuzatuvi · vertikalga qarab 20–100</td></tr>
+      <tr><td>ARPU (diller / oy)</td><td class="r">~1.2M so'm</td><td>40 × 30 000 so'm</td></tr>
+      <tr><td>Gross margin</td><td class="r">~85%</td><td>SaaS standart</td></tr>
+      <tr><td>USD kurs</td><td class="r">12 000 so'm</td><td>cbu.uz, iyun 2026 (~11 967)</td></tr>
+    </table>
+    <p class="note">Korxona soni rasmiy; ARPU va konversiya — pilotga asoslangan taxmin. SOM% ehtiyotkor (6%).</p>
+  </section>
+
+  <!-- 8 — BUSINESS MODEL -->
+  <section class="slide">
+    <span class="tag">Biznes model</span>
+    <h2>SaaS — moslashuvchan, takrorlanuvchi daromad</h2>
+    <p>Diller o'ziga qulay usulni tanlaydi. Imkoniyatlar barcha tarifda to'liq.</p>
+    <div class="grid g3" style="margin-top:18px">
+      <div class="card"><h3>Per-shop</h3><div class="price" style="margin-top:6px"><span class="v">30 000</span><span class="u">so'm / do'kon · oy</span></div></div>
+      <div class="card"><h3>Per-order</h3><div class="price" style="margin-top:6px"><span class="v">1 500</span><span class="u">so'm / buyurtma</span></div></div>
+      <div class="card"><h3>Per-seat</h3><div class="price" style="margin-top:6px"><span class="v">300 000</span><span class="u">so'm / yetkazuvchi · oy</span></div></div>
+    </div>
+    <p style="margin-top:18px" class="muted2">Kelajak upsell: to'lov shlyuzi komissiyasi, premium analitika, kreditlash, reklama — ARPU o'sish vektori.</p>
+  </section>
+
+  <!-- 9 — UNIT ECONOMICS -->
+  <section class="slide">
+    <span class="tag">Unit economics</span>
+    <h2>Har diller birinchi oydayoq foyda keltiradi</h2>
+    <div class="grid g4">
+      <div class="card"><span class="k b">~1.2M</span><h4>ARPU / oy</h4><p>so'm, diller boshiga</p></div>
+      <div class="card"><span class="k w">~250k</span><h4>CAC</h4><p>so'm — dealer-led, past</p></div>
+      <div class="card"><span class="k g">~36.7M</span><h4>LTV</h4><p>so'm (85% margin × 36 oy)</p></div>
+      <div class="card"><span class="k g">&lt; 1 oy</span><h4>Payback</h4><p>CAC qaytishi</p></div>
+    </div>
+    <div class="grid g3" style="margin-top:16px">
+      <div class="card center"><span class="k g">5–15 : 1</span><div class="sub">LTV : CAC (sog'lom ≥ 3:1)</div></div>
+      <div class="card center"><span class="k b">&gt; 100%</span><div class="sub">NRR — do'kon o'sishi + upsell</div></div>
+      <div class="card center"><span class="k w">&lt; 3%</span><div class="sub">Maqsadli oylik churn</div></div>
+    </div>
+    <p class="note">CAC sotuv ko'lami oshgach o'sadi — konservativ ssenariyda LTV:CAC ~5:1 (baribir a'lo).</p>
+  </section>
+
+  <!-- 10 — GROWTH PROJECTION CHART -->
+  <section class="slide">
+    <span class="tag">O'sish proeksiyasi · MRR</span>
+    <h2>36 oyda ~$1.8M ARR yo'li</h2>
+    <div class="chart">
+      <div class="col"><span class="val">60M</span><div class="bar" style="height:3%"></div><div class="lab"><b>M6</b>50 diller</div></div>
+      <div class="col"><span class="val">240M</span><div class="bar" style="height:13%"></div><div class="lab"><b>M12</b>200 diller</div></div>
+      <div class="col"><span class="val">600M</span><div class="bar" style="height:33%"></div><div class="lab"><b>M18</b>500 diller</div></div>
+      <div class="col"><span class="val">1.08B</span><div class="bar" style="height:60%"></div><div class="lab"><b>M24</b>900 diller</div></div>
+      <div class="col"><span class="val">1.8B so'm</span><div class="bar peak" style="height:100%"></div><div class="lab"><b>M36</b>1 500 diller</div></div>
+    </div>
+    <p class="note">MRR (so'm/oy). M36: ~1.8 mlrd so'm/oy ≈ $150k MRR → ~$1.8M ARR. Diller × ~1.2M so'm ARPU.</p>
+  </section>
+
+  <!-- 11 — GTM -->
+  <section class="slide">
+    <span class="tag">Go-to-market · Viral motion</span>
+    <h2>Bitta diller ulansa — o'nlab do'kon o'zi keladi</h2>
+    <div class="split" style="margin-top:6px">
+      <div class="card center">
+        <span class="big grad">1 : 40</span>
+        <p style="margin-top:12px">Har diller o'rtacha <span class="hl">40 do'konni</span> platformaga olib keladi — built-in viral loop, nol marketing xarajat.</p>
+      </div>
+      <ul>
+        <li><span class="hl">Past CAC</span> — diller do'konchilarini o'zi taklif qiladi (link).</li>
+        <li><span class="hl">Yuqori retention</span> — qarz & moliya bog'langach, switching cost baland.</li>
+        <li><span class="hl">Land & expand</span> — 1 vertikalda referral, keyin qo'shni vertikalga.</li>
+        <li><span class="hl">86 000 do'kon</span> — har biri kirish nuqtasi (stat.uz).</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 12 — MOAT / COMPETITION -->
+  <section class="slide">
+    <span class="tag">Raqobat & moat</span>
+    <h2>Nega bizni qaytarib bo'lmaydi</h2>
+    <div class="grid g2">
+      <div class="card"><span class="ico">🔒</span><h4>Data & moliya lock-in</h4><p>Qarz tarixi, balans, ombor — diller chiqolmaydi. Yuqori switching cost.</p></div>
+      <div class="card"><span class="ico">🌐</span><h4>Tarmoq effekti</h4><p>Do'kon bir nechta dillerda — platforma kattalashgani sari qiymat oshadi.</p></div>
+      <div class="card"><span class="ico">🇺🇿</span><h4>Mahalliy chuqurlik</h4><p>O'zbekcha, mahalliy soliq/logistika, Telegram — global ERP yetolmaydi.</p></div>
+      <div class="card"><span class="ico">⚡</span><h4>Mahsulot yetukligi & omnichannel</h4><p>30+ modul, bot + mobil ilova allaqachon live. Telegram'ga bog'liq emas. Yangi raqobatchiga 1+ yil kerak.</p></div>
+    </div>
+  </section>
+
+  <!-- 13 — ROADMAP -->
+  <section class="slide">
+    <span class="tag">Yo'l xaritasi</span>
+    <h2>Vaqtga bog'liq reja</h2>
+    <table>
+      <tr><th>Davr</th><th>Maqsad</th><th>KPI</th><th class="r">Holat</th></tr>
+      <tr><td>Bajarildi</td><td>Mobil ilova (Android/iOS) — omnichannel kanal</td><td>2-kanal live</td><td class="r"><span class="pill">Live</span></td></tr>
+      <tr><td>Hozir</td><td>Pilot dillerlar, PMF tasdiqlash</td><td>10 to'lovchi</td><td class="r"><span class="pill">Jarayonda</span></td></tr>
+      <tr><td>0–6 oy</td><td>Onboarding avtomatlashtirish, outbound</td><td>50 diller · 60M MRR</td><td class="r muted2">Reja</td></tr>
+      <tr><td>6–12 oy</td><td>To'lov shlyuzi, referral dvigateli</td><td>200 diller · 240M MRR</td><td class="r muted2">Reja</td></tr>
+      <tr><td>12–24 oy</td><td>Yangi vertikallar, regional pilot</td><td>900 diller · 1.08B MRR</td><td class="r muted2">Reja</td></tr>
+      <tr><td>24–36 oy</td><td>Region kengayish, AI tavsiya, kreditlash</td><td>1 500 diller · $1.8M ARR</td><td class="r muted2">Reja</td></tr>
+    </table>
+  </section>
+
+  <!-- 14 — USE OF FUNDS / ASK -->
+  <section class="slide">
+    <span class="tag">Sarmoya · Use of funds</span>
+    <h2>Nimaga sarmoya kerak</h2>
+    <div class="split" style="margin-top:6px">
+      <div class="card">
+        <h3>Talab (taxminiy — siz belgilang)</h3>
+        <div class="price" style="margin-top:10px"><span class="v">$___</span><span class="u">seed · 18 oylik runway</span></div>
+        <p style="margin-top:12px">Maqsad: 10 → 200 diller, PMF dan repeatable sotuvga.</p>
+      </div>
+      <ul>
+        <li><span class="hl">~45% Sotuv & onboarding</span> — outbound jamoa, referral.</li>
+        <li><span class="hl">~30% Mahsulot</span> — to'lov shlyuzi, push, analitika.</li>
+        <li><span class="hl">~15% Infratuzilma</span> — masshtab, ishonchlilik.</li>
+        <li><span class="hl">~10% Operatsion</span> — qo'llab-quvvatlash, marketing.</li>
+      </ul>
+    </div>
+    <p class="note">⚠️ Raise summasi va equity hali kiritilmagan — kerakli runway va baholashga qarab to'ldiring.</p>
+  </section>
+
+  <!-- 15 — CLOSE -->
+  <section class="slide center">
+    <div class="logo" style="justify-content:center">
+      <div class="mark"><svg viewBox="0 0 64 64" width="34" height="34" fill="none" stroke="#08101f" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M48 16 C 27 11, 13 24, 29 32 S 37 53, 13 48"/><path d="M39 11 L 48 16 L 45 25"/></svg></div>
+      <div class="name">Sale<span>flow</span></div>
+    </div>
+    <h1 style="font-size:clamp(30px,4.4vw,58px)">Mahsulot tayyor.<br>Bozor bo'sh. Vaqt — hozir.</h1>
+    <div class="grid g3" style="margin-top:28px;width:100%;max-width:820px">
+      <div class="card center"><span class="k g">$60M</span><div class="sub">TAM</div></div>
+      <div class="card center"><span class="k b">5–15:1</span><div class="sub">LTV : CAC</div></div>
+      <div class="card center"><span class="k w">$1.8M</span><div class="sub">3-yil ARR maqsad</div></div>
+    </div>
+    <p style="margin-top:26px" class="hl">opensales.uz · investitsiya muhokamasi</p>
+  </section>
+
+  <!-- 16 — SOURCES -->
+  <section class="slide">
+    <span class="tag">Manbalar · Sources</span>
+    <h2>Ma'lumot manbalari</h2>
+    <ul style="gap:14px">
+      <li><span class="hl">Ulgurji korxonalar ~51 500 · aylanma 346.6 trln so'm</span> — O'zbekiston Milliy statistika qo'mitasi, <a href="https://stat.uz/uz/">stat.uz</a> (dek 2025)</li>
+      <li><span class="hl">Chakana shoxobchalar ~86 200</span> — stat.uz / <a href="https://www.uzdaily.uz/en/uzbekistans-retail-trade-grows-103-in-first-10-months-of-2025/">uzdaily.uz</a> (2025)</li>
+      <li><span class="hl">Telegram 25 mln · 76% reach</span> — <a href="https://www.uzdaily.uz/en/telegram-76-reach-youtube-no-1-e-commerce-on-the-rise-inside-uzbekistans-digital-landscape/">uzdaily.uz</a> (2025)</li>
+      <li><span class="hl">USD/UZS ~11 967</span> — O'zbekiston Markaziy banki, <a href="https://cbu.uz/en/">cbu.uz</a> (iyun 2026)</li>
+    </ul>
+    <p class="note">Korxona soni va kurs — rasmiy. ARPU, do'kon/diller, konversiya va churn — pilot kuzatuviga asoslangan taxminlar; ko'proq traction bilan yangilanadi.</p>
+  </section>
+
+</div>
+
+<div class="nav">
+  <button onclick="go(-1)">‹</button>
+  <button onclick="go(1)">›</button>
+</div>
+<div class="counter" id="counter"></div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  let i=0;
+  function render(){
+    slides.forEach((s,n)=>s.classList.toggle('active',n===i));
+    document.getElementById('bar').style.width=((i+1)/slides.length*100)+'%';
+    document.getElementById('counter').textContent=(i+1)+' / '+slides.length;
+  }
+  function go(d){i=Math.max(0,Math.min(slides.length-1,i+d));render()}
+  document.addEventListener('keydown',e=>{
+    if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(1)}
+    if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(-1)}
+    if(e.key==='Home'){i=0;render()}
+    if(e.key==='End'){i=slides.length-1;render()}
+  });
+  render();
+</script>
+</body>
+</html>

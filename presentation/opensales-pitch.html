@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenSales — Pitch Deck</title>
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#0f1626; --card:#141d33; --line:#1f2a44;
+    --ink:#eaf0ff; --muted:#9fb0d0; --brand:#4f7cff; --brand2:#22d3a6;
+    --warn:#ffb020; --bad:#ff5d6c; --good:#22d3a6;
+    --radius:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:radial-gradient(1200px 800px at 80% -10%, #16223f 0%, var(--bg) 55%);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;
+    overflow:hidden;
+  }
+  .deck{height:100vh;width:100vw;position:relative}
+  .slide{
+    position:absolute;inset:0;
+    display:none;flex-direction:column;justify-content:center;
+    padding:6vh 8vw;
+    animation:fade .4s ease;
+  }
+  .slide.active{display:flex}
+  @keyframes fade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  h1{font-size:clamp(34px,5vw,68px);line-height:1.05;letter-spacing:-.02em;font-weight:800}
+  h2{font-size:clamp(26px,3.4vw,46px);line-height:1.1;letter-spacing:-.02em;font-weight:800;margin-bottom:.6em}
+  h3{font-size:clamp(15px,1.4vw,20px);font-weight:700;color:var(--brand2)}
+  p,li{font-size:clamp(15px,1.5vw,21px);color:var(--muted);line-height:1.55}
+  .lead{font-size:clamp(18px,2vw,28px);color:var(--ink);font-weight:500}
+  .tag{display:inline-block;font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--brand2);background:rgba(34,211,166,.1);border:1px solid rgba(34,211,166,.25);
+    padding:6px 14px;border-radius:999px;margin-bottom:22px}
+  .tag.inv{color:var(--brand);background:rgba(79,124,255,.12);border-color:rgba(79,124,255,.3)}
+
+  .grid{display:grid;gap:18px;margin-top:8px}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  .card{background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);
+    border-radius:var(--radius);padding:22px 22px;}
+  .card .k{font-size:clamp(28px,3.6vw,44px);font-weight:800;color:var(--ink);letter-spacing:-.02em}
+  .card .k.b{color:var(--brand)}.card .k.g{color:var(--brand2)}.card .k.w{color:var(--warn)}
+  .card h4{font-size:17px;font-weight:700;color:var(--ink);margin-bottom:6px}
+  .card p{font-size:15px}
+  .ico{font-size:26px;margin-bottom:10px;display:block}
+
+  ul{list-style:none;display:flex;flex-direction:column;gap:14px;margin-top:10px}
+  ul li{padding-left:30px;position:relative}
+  ul li::before{content:"";position:absolute;left:0;top:.55em;width:11px;height:11px;border-radius:3px;
+    background:var(--brand2);box-shadow:0 0 14px rgba(34,211,166,.6)}
+  ul.bad li::before{background:var(--bad);box-shadow:0 0 14px rgba(255,93,108,.5)}
+
+  .flow{display:flex;align-items:stretch;gap:14px;flex-wrap:wrap;margin-top:18px}
+  .step{flex:1;min-width:150px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .step .n{font-size:13px;font-weight:800;color:var(--brand);letter-spacing:.1em}
+  .step h4{font-size:17px;margin:6px 0;color:var(--ink)}
+  .step p{font-size:14px}
+  .arrow{align-self:center;color:var(--brand);font-size:24px;opacity:.6}
+
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+  .big{font-size:clamp(48px,8vw,120px);font-weight:800;letter-spacing:-.03em;line-height:1}
+  .grad{background:linear-gradient(120deg,var(--brand),var(--brand2));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+  .logo{display:flex;align-items:center;gap:14px;margin-bottom:30px}
+  .logo .mark{width:54px;height:54px;border-radius:14px;background:linear-gradient(135deg,var(--brand),var(--brand2));
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:26px;color:#08101f}
+  .logo .name{font-size:26px;font-weight:800;letter-spacing:-.01em}
+  .logo .name span{color:var(--brand2)}
+
+  .foot{position:absolute;bottom:22px;left:8vw;right:8vw;display:flex;justify-content:space-between;
+    align-items:center;font-size:12px;color:#5c6e90;letter-spacing:.04em}
+  .progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--brand),var(--brand2));
+    z-index:50;transition:width .3s ease}
+  .nav{position:fixed;bottom:18px;right:24px;display:flex;gap:8px;z-index:50}
+  .nav button{background:var(--card);border:1px solid var(--line);color:var(--ink);width:40px;height:40px;
+    border-radius:10px;font-size:18px;cursor:pointer}
+  .nav button:hover{border-color:var(--brand)}
+  .price{display:flex;align-items:baseline;gap:8px}
+  .price .v{font-size:clamp(30px,4vw,50px);font-weight:800;color:var(--ink)}
+  .price .u{font-size:16px;color:var(--muted)}
+  table{width:100%;border-collapse:collapse;margin-top:10px}
+  td,th{padding:14px 12px;border-bottom:1px solid var(--line);text-align:left;font-size:clamp(14px,1.4vw,18px)}
+  th{color:var(--brand2);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+  td.r,th.r{text-align:right}
+  .pill{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(34,211,166,.12);
+    color:var(--brand2);border:1px solid rgba(34,211,166,.25)}
+  .muted2{color:#6f80a3}
+  .center{text-align:center;align-items:center}
+  .hl{color:var(--ink);font-weight:700}
+</style>
+</head>
+<body>
+<div class="progress" id="bar"></div>
+<div class="deck" id="deck">
+
+  <!-- 1 — TITLE -->
+  <section class="slide active center">
+    <div class="logo" style="justify-content:center">
+      <div class="mark"><svg viewBox="0 0 64 64" width="34" height="34" fill="none" stroke="#08101f" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M48 16 C 27 11, 13 24, 29 32 S 37 53, 13 48"/><path d="M39 11 L 48 16 L 45 25"/></svg></div>
+      <div class="name">Sale<span>flow</span></div>
+    </div>
+    <h1>Diller savdosini<br>raqamlashtiramiz</h1>
+    <p class="lead" style="margin-top:26px;max-width:760px">
+      Ulgurji dillerlar uchun Telegram bot va mobil ilova orqali buyurtma, moliya,
+      yetkazib berish va hisobotlarni boshqaruvchi yagona platforma.
+    </p>
+    <p style="margin-top:28px" class="muted2">Pitch Deck · 2026 · opensales.uz</p>
+  </section>
+
+  <!-- 2 — PROBLEM -->
+  <section class="slide">
+    <span class="tag">Muammo</span>
+    <h2>Ulgurji savdo qog'oz va telefon orqali ishlaydi</h2>
+    <div class="split">
+      <ul class="bad">
+        <li><span class="hl">Buyurtma telefon/WhatsApp orqali</span> — adashish, unutish, yozma iz yo'q.</li>
+        <li><span class="hl">Qarzdorlik daftarni</span> ko'tarib yuradi — kim qancha qarz, aniq emas.</li>
+        <li><span class="hl">Savdo agenti qimmat</span> — maosh, yo'l, inson xatosi, o'g'irlik.</li>
+        <li><span class="hl">Ombor va yetkazish</span> bir-biriga bog'lanmagan, real-time emas.</li>
+      </ul>
+      <div class="card">
+        <h3>Natija</h3>
+        <p style="margin-top:12px">Diller kuniga soatlab vaqtni buyurtma yig'ish, qarz hisoblash va
+        yetkazishni muvofiqlashtirishga sarflaydi. Xato = yo'qotilgan pul va mijoz.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 — SOLUTION -->
+  <section class="slide">
+    <span class="tag">Yechim</span>
+    <h2>Bot + mobil ilova + web boshqaruv</h2>
+    <p class="lead" style="max-width:820px">Do'konchi Telegram botdan yoki mobil ilovadan zakaz beradi. Diller hammasini bitta dashboard'dan ko'radi — buyurtma, qarz, ombor, yetkazish, hisobot.</p>
+    <div class="grid g3" style="margin-top:26px">
+      <div class="card"><span class="ico">🤖</span><h4>Do'konchi → Bot yoki ilova</h4><p>Katalog, savat, zakaz, o'z hisob-kitobi. Telegram bot yoki mobil ilova (Android/iOS) — ikkalasi bitta hisob.</p></div>
+      <div class="card"><span class="ico">📊</span><h4>Diller → Web panel</h4><p>Buyurtmalar, moliya, ombor, yetkazuvchilar, hisobotlar — bir joyda.</p></div>
+      <div class="card"><span class="ico">⚙️</span><h4>Super admin → Platforma</h4><p>Barcha dillerlar, billing, statistika, monitoring.</p></div>
+    </div>
+  </section>
+
+  <!-- 4 — HOW IT WORKS -->
+  <section class="slide">
+    <span class="tag">Qanday ishlaydi</span>
+    <h2>Zakazdan yetkazishgacha — 4 qadam</h2>
+    <div class="flow">
+      <div class="step"><div class="n">01</div><h4>Katalog</h4><p>Do'konchi botda mahsulot va narxni ko'radi.</p></div>
+      <div class="arrow">→</div>
+      <div class="step"><div class="n">02</div><h4>Savat & zakaz</h4><p>Miqdor tanlaydi, tasdiqlaydi. Diller darhol bildirishnoma oladi.</p></div>
+      <div class="arrow">→</div>
+      <div class="step"><div class="n">03</div><h4>Yetkazish</h4><p>Marshrut, zona, kuryer kassa avtomatik tayinlanadi.</p></div>
+      <div class="arrow">→</div>
+      <div class="step"><div class="n">04</div><h4>Moliya</h4><p>To'lov, qarz, balans avtomatik yangilanadi. Hisobot tayyor.</p></div>
+    </div>
+    <p style="margin-top:26px" class="muted2">Har narx snapshot saqlanadi — kelajakda narx o'zgarsa ham eski zakaz buzilmaydi.</p>
+  </section>
+
+  <!-- 5 — FEATURES (depth) -->
+  <section class="slide">
+    <span class="tag">Platforma</span>
+    <h2>Bu MVP emas — to'liq ishlaydigan tizim</h2>
+    <div class="grid g4">
+      <div class="card"><span class="ico">🧾</span><h4>Buyurtma</h4><p>Savat, status oqimi, qayta zakaz, status tarixi.</p></div>
+      <div class="card"><span class="ico">💰</span><h4>Moliya</h4><p>Qarz, balans, to'lov, qarz eskirishi, eslatma.</p></div>
+      <div class="card"><span class="ico">📦</span><h4>Ombor</h4><p>Qoldiq, stok harakati, kam qoldiq ogohlantirish.</p></div>
+      <div class="card"><span class="ico">🚚</span><h4>Yetkazish</h4><p>Zona, marshrut, masofa, kuryer kassa hisobi.</p></div>
+      <div class="card"><span class="ico">📢</span><h4>Broadcast</h4><p>Kampaniya, ommaviy xabar, segment.</p></div>
+      <div class="card"><span class="ico">🏷️</span><h4>Aksiya</h4><p>Promotion, ommaviy narx o'zgartirish.</p></div>
+      <div class="card"><span class="ico">📈</span><h4>Hisobot</h4><p>Savdo, foyda, mijoz, qaytarish, kunlik yopish.</p></div>
+      <div class="card"><span class="ico">🤝</span><h4>Taʼminotchi</h4><p>Supplier moliya, qaytarish, balans.</p></div>
+    </div>
+    <p style="margin-top:20px" class="muted2">+ Mobil ilova (Android/iOS) · audit log · impersonatsiya · bot sog'lig'i monitoringi · ko'p tilli (uz / uz-cyrl / ru / en) · SEO bloglar.</p>
+  </section>
+
+  <!-- 6 — WHY NOW / MARKET -->
+  <section class="slide">
+    <span class="tag inv">Bozor · Investor</span>
+    <h2>Nega aynan hozir?</h2>
+    <div class="grid g3" style="margin-top:10px">
+      <div class="card"><span class="k b">38M+</span><h4>Telegram foydalanuvchi</h4><p>O'zbekistonda bot — eng tabiiy interfeys. O'rgatish shart emas.</p></div>
+      <div class="card"><span class="k g">10 000+</span><h4>Ulgurji diller</h4><p>Oziq-ovqat, ichimlik, maishiy mol — har biri o'nlab do'kon bilan ishlaydi.</p></div>
+      <div class="card"><span class="k w">~0</span><h4>Mahalliy raqobat</h4><p>Bozorga moslashgan, bot-native, o'zbekcha SaaS deyarli yo'q.</p></div>
+    </div>
+    <p class="lead" style="margin-top:28px">Raqamlashtirish to'lqini boshlandi — biz infratuzilmani egallayapmiz.</p>
+  </section>
+
+  <!-- 7 — BUSINESS MODEL -->
+  <section class="slide">
+    <span class="tag inv">Biznes model · Investor</span>
+    <h2>SaaS — takrorlanuvchi oylik daromad</h2>
+    <p>Diller o'zi uchun qulay usulni tanlaydi. Imkoniyatlar barcha tarifda to'liq.</p>
+    <div class="grid g3" style="margin-top:20px">
+      <div class="card"><h3>Do'kon bo'yicha</h3><div class="price" style="margin-top:8px"><span class="v">30 000</span><span class="u">so'm / faol do'kon · oy</span></div></div>
+      <div class="card"><h3>Buyurtma bo'yicha</h3><div class="price" style="margin-top:8px"><span class="v">1 500</span><span class="u">so'm / buyurtma</span></div></div>
+      <div class="card"><h3>Jamoa bo'yicha</h3><div class="price" style="margin-top:8px"><span class="v">300 000</span><span class="u">so'm / yetkazuvchi · oy</span></div></div>
+    </div>
+    <p style="margin-top:24px" class="muted2">Misol: 40 do'konli diller → ~1.2M so'm/oy. 100 diller × 40 do'kon → ~120M so'm/oy takrorlanuvchi daromad.</p>
+  </section>
+
+  <!-- 8 — UNIT ECON / SCALE -->
+  <section class="slide center">
+    <span class="tag inv">Miqyos · Investor</span>
+    <h2 style="text-align:center">Bitta diller ulansa — o'nlab do'kon keladi</h2>
+    <div class="split" style="margin-top:10px">
+      <div class="card center">
+        <span class="big grad">1 : 40</span>
+        <p style="margin-top:14px">Har diller o'rtacha <span class="hl">40 do'konni</span> platformaga olib keladi — viral, nol marketing.</p>
+      </div>
+      <ul>
+        <li><span class="hl">Past CAC</span> — diller o'z do'konchilarini o'zi taklif qiladi.</li>
+        <li><span class="hl">Yuqori retention</span> — moliya va qarz tizimga bog'langach, chiqish qiyin.</li>
+        <li><span class="hl">Tabiiy upsell</span> — yetkazish, broadcast, hisobot qo'shimcha qiymat.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 9 — DEALER VALUE -->
+  <section class="slide">
+    <span class="tag">Diller uchun · Qiymat</span>
+    <h2>Savdo agentini almashtiradi, foydani oshiradi</h2>
+    <div class="grid g2">
+      <div class="card"><span class="ico">⏱️</span><h4>Vaqt tejaydi</h4><p>Zakaz o'zi tushadi. Telefon, daftar, qo'lda hisob yo'q.</p></div>
+      <div class="card"><span class="ico">💸</span><h4>Xarajat kamayadi</h4><p>Agent maoshi, yo'l, inson xatosi o'rniga arzon obuna.</p></div>
+      <div class="card"><span class="ico">🔍</span><h4>To'liq shaffoflik</h4><p>Kim qancha qarz, qaysi mol o'tyapti — real-time.</p></div>
+      <div class="card"><span class="ico">📲</span><h4>24/7 · ikki kanal</h4><p>Do'konchi istalgan vaqt bot yoki ilovadan zakaz beradi. Telegram tushib qolsa ham ilova ishlayveradi.</p></div>
+    </div>
+  </section>
+
+  <!-- 10 — DEALER ONBOARDING -->
+  <section class="slide">
+    <span class="tag">Diller uchun · Boshlash</span>
+    <h2>5 daqiqada ishga tushasiz</h2>
+    <div class="flow">
+      <div class="step"><div class="n">01</div><h4>Ro'yxatdan o'tish</h4><p>Diller akkaunt ochiladi.</p></div>
+      <div class="arrow">→</div>
+      <div class="step"><div class="n">02</div><h4>Bot ulanadi</h4><p>O'z botingiz token bilan avtomatik bog'lanadi.</p></div>
+      <div class="arrow">→</div>
+      <div class="step"><div class="n">03</div><h4>Katalog</h4><p>Mahsulot, narx, kategoriya yuklanadi.</p></div>
+      <div class="arrow">→</div>
+      <div class="step"><div class="n">04</div><h4>Do'kon taklif</h4><p>Do'konchilarni link orqali chaqirasiz.</p></div>
+    </div>
+    <p style="margin-top:24px" class="lead">Texnik bilim shart emas. Biz sozlab beramiz.</p>
+  </section>
+
+  <!-- 11 — STATUS / TRACTION -->
+  <section class="slide">
+    <span class="tag inv">Holat · Investor</span>
+    <h2>Mahsulot tayyor, productionda ishlamoqda</h2>
+    <div class="grid g4">
+      <div class="card center"><span class="k g">✓</span><h4>Live</h4><p>opensales.uz ishlamoqda</p></div>
+      <div class="card center"><span class="k b">30+</span><h4>Modul</h4><p>Buyurtmadan hisobotgacha</p></div>
+      <div class="card center"><span class="k">Bot + Ilova</span><h4>2 kanal</h4><p>Telegram va mobil ilova</p></div>
+      <div class="card center"><span class="k w">4 til</span><h4>Lokalizatsiya</h4><p>uz · uz-cyrl · ru · en</p></div>
+    </div>
+    <p style="margin-top:24px" class="muted2">Stack: Laravel 13 · PostgreSQL · Redis · Inertia + Vue 3. Masshtablanadigan, ishonchli, ko'p ijaraviy (multi-tenant).</p>
+  </section>
+
+  <!-- 12 — ROADMAP -->
+  <section class="slide">
+    <span class="tag inv">Yo'l xaritasi</span>
+    <h2>Keyingi 12 oy</h2>
+    <table>
+      <tr><th>Bosqich</th><th>Maqsad</th><th class="r">Holat</th></tr>
+      <tr><td>Bajarildi</td><td>Mobil ilova (Android/iOS) — bot bilan bir xil hisob, Telegramga bog'liq bo'lmagan kanal</td><td class="r"><span class="pill">Live</span></td></tr>
+      <tr><td>Hozir</td><td>Birinchi to'lovchi dillerlar, mahsulotni qayrash</td><td class="r"><span class="pill">Jarayonda</span></td></tr>
+      <tr><td>1–3 oy</td><td>100 diller, onboarding avtomatlashtirish</td><td class="r muted2">Reja</td></tr>
+      <tr><td>4–6 oy</td><td>To'lov shlyuzi integratsiyasi, push bildirishnomalar</td><td class="r muted2">Reja</td></tr>
+      <tr><td>7–12 oy</td><td>Region kengayish, analitika & AI tavsiya</td><td class="r muted2">Reja</td></tr>
+    </table>
+  </section>
+
+  <!-- 13 — ASK / CTA -->
+  <section class="slide center">
+    <div class="logo" style="justify-content:center">
+      <div class="mark"><svg viewBox="0 0 64 64" width="34" height="34" fill="none" stroke="#08101f" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M48 16 C 27 11, 13 24, 29 32 S 37 53, 13 48"/><path d="M39 11 L 48 16 L 45 25"/></svg></div>
+      <div class="name">Sale<span>flow</span></div>
+    </div>
+    <h1 style="font-size:clamp(30px,4.4vw,58px)">Ulgurji savdoning<br>raqamli infratuzilmasi</h1>
+    <p class="lead" style="margin-top:24px;max-width:700px">
+      Investorlar uchun — o'sayotgan bozorda erta pozitsiya.<br>
+      Dillerlar uchun — bugundan boshlanadigan tejam va nazorat.
+    </p>
+    <p style="margin-top:30px" class="hl">opensales.uz · demo so'rang</p>
+  </section>
+
+</div>
+
+<div class="nav">
+  <button onclick="go(-1)">‹</button>
+  <button onclick="go(1)">›</button>
+</div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  let i=0;
+  function render(){
+    slides.forEach((s,n)=>s.classList.toggle('active',n===i));
+    document.getElementById('bar').style.width=((i+1)/slides.length*100)+'%';
+  }
+  function go(d){i=Math.max(0,Math.min(slides.length-1,i+d));render()}
+  document.addEventListener('keydown',e=>{
+    if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(1)}
+    if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(-1)}
+    if(e.key==='Home'){i=0;render()}
+    if(e.key==='End'){i=slides.length-1;render()}
+  });
+  render();
+</script>
+</body>
+</html>
