@@ -34,6 +34,10 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Ensure writable framework directories
+        run: mkdir -p storage/framework/views storage/framework/cache/data storage/framework/sessions bootstrap/cache
+        shell: bash
+
       - name: Install PHP dependencies
         run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
         env:
