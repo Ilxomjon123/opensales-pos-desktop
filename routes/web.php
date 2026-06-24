@@ -87,7 +87,10 @@ use Inertia\Inertia;
 // Boshqa tillar `/<locale>` prefiksi bilan (nomi `loc.` bilan): `/ru`, `/ru/blog`.
 // Faqat marketing sahifalari; admin/diller qismi tegmaydi.
 $landingRoutes = function (): void {
-    Route::get('/', fn () => Inertia::render('Welcome'))->name('home');
+    // Offline POS — landing yo'q. Index'da to'g'ridan login (kirgan bo'lsa POS).
+    Route::get('/', fn () => auth()->check()
+        ? redirect()->route('dealer.pos.index')
+        : redirect()->route('login'))->name('home');
 
     Route::prefix('blog')->name('blog.')->group(function (): void {
         Route::get('/', [BlogController::class, 'index'])->name('index');

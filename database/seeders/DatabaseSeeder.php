@@ -10,7 +10,8 @@ final class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Offline POS desktop — faqat lokal biznes ma'lumoti (geo kerak emas).
+        // Offline POS desktop — biznes (diller/kassir/mijoz) + namuna katalog.
         $this->call(OfflineSeeder::class);
+        $this->call(ProductCatalogSeeder::class);
     }
 }
