@@ -39,3 +39,6 @@ storage/framework/sessions/*
 !storage/framework/sessions/.gitignore
 storage/framework/views/*
 !storage/framework/views/.gitkeep
+
+/runtime
+storage/.installed
